@@ -1,5 +1,5 @@
 function makeXhrRequestWithPromise(url) {
-  const myPromise = new Promise(resolve => {
+  const myPromise = new Promise((resolve,reject) => {
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
@@ -7,6 +7,10 @@ function makeXhrRequestWithPromise(url) {
           const response = JSON.parse(xhr.responseText);
           resolve(response);
         }, Math.random() * 1000);
+      }
+      if (this.readyState == 4 && this.status !== 200) {
+          const response = JSON.parse(xhr.responseText);
+          reject(xhr);
       }
     };
     xhr.open('GET', url, true);
@@ -124,5 +128,5 @@ postPromise
     userCallback(response);
   })
   .catch(e => {
-    console.log(e);
+    console.log('error', e);
   });
